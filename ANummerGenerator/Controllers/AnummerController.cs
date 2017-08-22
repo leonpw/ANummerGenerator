@@ -2,11 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Http;
-using System.Threading.Tasks;
-
-//using System.Net;
-//using System.Net.Http;
 
 namespace ANummerGenerator.Controllers
 {
@@ -62,21 +57,13 @@ namespace ANummerGenerator.Controllers
 
             char[] _anummerArray = aNummer.ToCharArray();
 
-            isValid = _anummerArray.Length == 10;
-
-            if (_anummerArray.Length < 10)
-            {
-                return false;
-            }
-            else if (_anummerArray.Length > 10)
+            if (_anummerArray.Length != 10)
             {
                 return false;
             }
 
-            // Voorwaarde 1: a0 != 0
             isValid = isValid && (_anummerArray[0] != '0');
 
-            // Voorwaarde 2: 2 opeenvolgende cijfers zijn ongelijk
             if (isValid)
             {
                 for (_index = 1; _index < 10; _index++)
@@ -85,25 +72,22 @@ namespace ANummerGenerator.Controllers
                 }
             }
 
-            // Voorwaarde 3: a0+a1+..+a9 is deelbaar door 11, met rest 0
-            // Release 6.0 RNI: a0+a1+..+a9 is deelbaar door 11, met rest 0 of 5
             if (isValid)
             {
                 _totaal = 0;
                 for (_index = 0; _index < 10; _index++)
                 {
-                    _totaal += (int)_anummerArray[_index] - (int)'0';
+                    _totaal += _anummerArray[_index] - '0';
                 }
                 isValid = isValid && (((_totaal % 11) == 0) || ((_totaal % 11) == 5));
             }
 
-            // Voorwaarde 4: (1*a0)+(2*a2)+(4*a2)+..+(512*a9) is deelbaar door 11
             if (isValid)
             {
                 _totaal = 0;
                 for (_index = 0; _index < 10; _index++)
                 {
-                    _totaal += ((int)System.Math.Pow(2, _index)) * ((int)_anummerArray[_index] - (int)'0');
+                    _totaal += ((int)Math.Pow(2, _index)) * (_anummerArray[_index] - '0');
                 }
                 isValid = isValid && ((_totaal % 11) == 0);
             }
