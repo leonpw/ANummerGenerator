@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  anummergenerator:
+    image: anummergenerator
+    build:
+      context: ./ANummerGenerator
+      dockerfile: Dockerfile

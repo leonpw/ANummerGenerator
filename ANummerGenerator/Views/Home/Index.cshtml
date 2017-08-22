@@ -1,0 +1,20 @@
+﻿@{
+    ViewData["Title"] = "Genereer A-nummer";
+}
+
+
+<div class="row">
+    
+        <h2>Genereer A-nummer</h2>
+    Aantal:
+    @Html.TextBox("amount", 1, new { required = "required" })
+
+    <a id="Generate" class="btn-success btn">Genereer</a> 
+    
+    <div id="results">
+        <ol>
+
+        </ol>
+    </div>
+
+  </div>
