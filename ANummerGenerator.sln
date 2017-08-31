@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANummerGenerator", "ANummer
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D5E9379D-50B2-4A23-A9FC-1C957E07325E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANummerGeneratorTests", "ANummerGeneratorTests\ANummerGeneratorTests.csproj", "{62F5A0E5-638E-497F-93A1-441E74D347FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D5E9379D-50B2-4A23-A9FC-1C957E07325E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5E9379D-50B2-4A23-A9FC-1C957E07325E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5E9379D-50B2-4A23-A9FC-1C957E07325E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62F5A0E5-638E-497F-93A1-441E74D347FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62F5A0E5-638E-497F-93A1-441E74D347FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62F5A0E5-638E-497F-93A1-441E74D347FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62F5A0E5-638E-497F-93A1-441E74D347FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
