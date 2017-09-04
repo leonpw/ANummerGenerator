@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace ANummerGenerator
 {
@@ -42,7 +41,7 @@ namespace ANummerGenerator
             return Math.Round(random.NextDouble() * 10000000000, 0);
         }
 
-        public IEnumerable<long> IsValidANummerRange(IEnumerable<long> range)
+        public IEnumerable<long> GetValidANummerRange(IEnumerable<long> range)
         {
             foreach (var aNummer in range)
             {
@@ -53,30 +52,27 @@ namespace ANummerGenerator
             }
         }
 
-        public IEnumerable<long> IsValidANummerRangeParallel(IEnumerable<long> range)
+        public IEnumerable<long> GetValidANummerRangeParallel(IEnumerable<long> range, 
+            Action<long> action = null)
         {
             List<long> list = new List<long>();
-            var x = Parallel.ForEach(range, (aNummer) =>
+            
+            foreach (var aNummer in range)
             {
                 if (IsValidANummer(aNummer.ToString()))
                 {
                     Trace.WriteLine($"Number: {aNummer} is valid!");
                     list.Add(aNummer);
+                    action?.Invoke(aNummer);
                 }
-            });
+                Tries++;
+            }
+            
             return list;
         }
 
         private bool IsValidANummer(string aNummer)
         {
-            bool isValid = true;
-            int _index;
-            long _totaal;
-
-            if (aNummer == null)
-            {
-                return false;
-            }
 
             char[] _anummerArray = aNummer.ToCharArray();
 
@@ -84,6 +80,10 @@ namespace ANummerGenerator
             {
                 return false;
             }
+
+            bool isValid = true;
+            int _index;
+            long _totaal;
 
             isValid = isValid && (_anummerArray[0] != '0');
 
@@ -102,11 +102,16 @@ namespace ANummerGenerator
                 {
                     _totaal += _anummerArray[_index] - '0';
                 }
-                isValid = isValid && ((_totaal % 11) == 0);
 
+                
                 if (allowMod5)
                 {
-                    isValid = isValid && ((_totaal % 11) == 5);
+                    isValid = isValid && (((_totaal % 11) == 0) || ((_totaal % 11) == 5));
+                }
+                else
+                {
+                    isValid = isValid && ((_totaal % 11) == 0);
+
                 }
             }
 

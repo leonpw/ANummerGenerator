@@ -1,7 +1,9 @@
 using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using ANummerGenerator;
 using Xunit;
 
@@ -23,39 +25,51 @@ namespace ANummerGeneratorTests
         }
 
         [Fact]
-        public void IsValidANummerRangeParallel_ShouldGenerate10Numbers()
+        [Category("Slow")]
+        public void GenerateAllANumbers()
         {
-            // smallest Anummer
-            var range = LongRange(1010101010, 10);
+            string filename = $"{Directory.GetCurrentDirectory()}\\{DateTime.UtcNow.ToString("yyyy-MM-dd_hh-mm-ss-tt")}.txt";
 
-            var result = new AnummerGenerator(allowMod5: false).
-                IsValidANummerRangeParallel(range);
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            var generator = new AnummerGenerator(allowMod5: true);
 
-            var res = CheckDiff(result.ToArray()).ToArray();
-        }
+            var range = IEnumerableHelpers.LongRange(1010101010, 100000000);
 
-        public static IEnumerable<long> CheckDiff(long[] collection)
-        {
-            for (int i = 1; i < collection.Length; i++)
+            using (FileStream stream = new FileStream(filename, FileMode.Append, FileAccess.Write, FileShare.None, 4096, true))
+            using (StreamWriter streamWriter = new StreamWriter(stream))
             {
-                if (collection[i].ToString()[7] == collection[i - 1].ToString()[7])
-                    yield return collection[i];
+                var result = generator.
+                    GetValidANummerRangeParallel(range, async (validAnumber) =>
+                        await streamWriter.WriteLineAsync(validAnumber.ToString()));
+
+                sw.Stop();
+
+                string log = $"Generated {result.Count()} A-nummer in: {sw.Elapsed}. We checked {generator.Tries} numbers";
+                streamWriter.WriteLine(log);
+                Trace.WriteLine(log);
             }
         }
 
-        public static IEnumerable<long> LongRange(long start, long count)
+        private async Task FileWriteAsync(string filePath, string message, bool append = true)
         {
-            long max = start + count - 1;
-            if (count < 0)
-                throw new ArgumentOutOfRangeException("count");
-
-            return RangeIterator(start, count);
+            using (FileStream stream = new FileStream(filePath, append ? FileMode.Append : FileMode.Create, FileAccess.Write, FileShare.None, 4096, true))
+            using (StreamWriter sw = new StreamWriter(stream))
+            {
+                await sw.WriteLineAsync(message);
+                await sw.FlushAsync();
+            }
         }
 
-        private static IEnumerable<long> RangeIterator(long start, long count)
+        [Fact]
+        public void GetValidANummerRangeParallel_1010101010_ShouldBeValid()
         {
-            for (int i = 0; i < count; i++)
-                yield return start + i;
+            long[] range = new long[] { 1010101010 };
+
+            var result = new AnummerGenerator(allowMod5: true).
+                GetValidANummerRangeParallel(range);
+
+            Assert.True(result.Count() == 1);
         }
     }
 }
