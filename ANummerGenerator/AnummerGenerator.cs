@@ -52,11 +52,11 @@ namespace ANummerGenerator
             }
         }
 
-        public IEnumerable<long> GetValidANummerRangeParallel(IEnumerable<long> range, 
+        public IEnumerable<long> GetValidANummerRangeParallel(IEnumerable<long> range,
             Action<long> action = null)
         {
             List<long> list = new List<long>();
-            
+
             foreach (var aNummer in range)
             {
                 if (IsValidANummer(aNummer.ToString()))
@@ -67,12 +67,15 @@ namespace ANummerGenerator
                 }
                 Tries++;
             }
-            
+
             return list;
         }
 
         private bool IsValidANummer(string aNummer)
         {
+            bool isValid = true;
+            int _index;
+            long _totaal;
 
             char[] _anummerArray = aNummer.ToCharArray();
 
@@ -80,10 +83,6 @@ namespace ANummerGenerator
             {
                 return false;
             }
-
-            bool isValid = true;
-            int _index;
-            long _totaal;
 
             isValid = isValid && (_anummerArray[0] != '0');
 
@@ -103,7 +102,6 @@ namespace ANummerGenerator
                     _totaal += _anummerArray[_index] - '0';
                 }
 
-                
                 if (allowMod5)
                 {
                     isValid = isValid && (((_totaal % 11) == 0) || ((_totaal % 11) == 5));
@@ -111,7 +109,6 @@ namespace ANummerGenerator
                 else
                 {
                     isValid = isValid && ((_totaal % 11) == 0);
-
                 }
             }
 

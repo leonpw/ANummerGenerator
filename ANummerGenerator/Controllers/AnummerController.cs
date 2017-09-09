@@ -5,13 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace ANummerGenerator.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Anummer/{amount:int}")]
     public class AnummerController : Controller
     {
-        public AnummerController()
-        {
-        }
-
+        [HttpPost]
         public IEnumerable<string> Generate(int amount)
         {
             if (amount > 10)
@@ -20,7 +16,5 @@ namespace ANummerGenerator.Controllers
             }
             return new AnummerGenerator(true).GenerateAnummer(amount);
         }
-
-        
     }
 }
